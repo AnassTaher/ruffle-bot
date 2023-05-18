@@ -1,50 +1,57 @@
 import discord
-import os
-import datetime
 from discord.ext import commands
-from dotenv import load_dotenv
-from dataclasses import dataclass
+import settings
 
+bot = commands.Bot(command_prefix="!", intents=discord.Intents.all(), help_command=None)
 
+def startup():
 
-if __name__ == '__main__':
-    start_time = datetime.time()
+    @bot.event
+    async def on_ready():
 
-    load_dotenv()
-
-    TOKEN = os.getenv('DISCORD_TOKEN')
-    GENERAL = int(os.getenv('GENERAL'))
-    LAUNCHED = int(os.getenv('LAUNCHED'))
-
-    bot = commands.Bot(command_prefix="!", intents=discord.Intents.all())
-    print("test1")
-    bot.run(TOKEN)
-    print("test2")
-
-@dataclass
-class Config:
-    announcement : int = 0
-    voting : int = 0
-
-@bot.event
-async def on_ready():
-    from election import check_for_monday
-    channel = bot.get_channel(LAUNCHED)
-    await channel.send("I have launched")
-    check_for_monday.start()
+        for file in settings.CMDS_DIR.glob("*.py"):
+            if file.name != "__init__.py":
+                await bot.load_extension(f"commands.{file.name[:-3]}")
+    
+    bot.run(settings.TOKEN)
 
 @bot.event
 async def on_command_error(ctx, error):
     return await ctx.send(f"Invalid command, error: {error}")
 
 
-@bot.command(name='announce')
-async def set_announcement(ctx : commands.context.Context, channel : str):
+@bot.command()
+async def help(ctx : commands.context.Context):
     
-    print(channel, type(channel))
-    channel_id = int(channel[2:-1])
-    print(channel_id)
-    given = bot.get_channel(channel_id)
-    print(given, type(given))
+    
+    title = f"""
+        Command list
+    """
+
+    description = f"""
+
+        Config:
+            > *set_announce  channel* :   **!set_announce #general**
+            > *set_voting channel* :   **!set_voting #general**
+            > *set_duration number unit* : **!set_duration 5 minutes**
+            > *set_role name* : **!set_role admin**
+                    
+        Election:
+            > *start* : **!start**
+            > *end*   : **!end**
+            > *vote @user* : **!vote @user**
+        
+    """
+
+    embed = discord.Embed(title=title, description=description, color=0x72d345)
+
+    await ctx.send(embed=embed)
+    
+if __name__ == '__main__':
+    startup()
+
+
+
+
 
 
