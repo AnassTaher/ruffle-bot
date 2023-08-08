@@ -6,9 +6,9 @@
 ```
 Config:
 
-- !set_announce #channel 
-- !set_voting #channel
-- !set_duration 5 minutes/hours(default/no identifier is seconds)
+- !set_announce #<channel> 
+- !set_voting #<channel>
+- !set_duration <number> <minutes/hours>(default/no identifier is seconds)
 - !set_role role
 ```
 
@@ -16,7 +16,7 @@ Config:
 Election:
 - !start
 - !end
-- !vote @user
+- !vote @<user>
 ```
 
 
