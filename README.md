@@ -9,7 +9,7 @@ Config:
 - !set_announce #<channel> 
 - !set_voting #<channel>
 - !set_duration <number> <minutes/hours>(default/no identifier is seconds)
-- !set_role role
+- !set_role <role>
 ```
 
 ```       
