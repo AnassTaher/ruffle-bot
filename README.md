@@ -6,10 +6,10 @@
 ```
 Config:
 
-- !set_announce #general 
-- !set_voting #general
-- !set_duration 5 minutes
-- !set_role admin
+- !set_announce #channel 
+- !set_voting #channel
+- !set_duration 5 minutes/hours(default/no identifier is seconds)
+- !set_role role
 ```
 
 ```       
